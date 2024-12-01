@@ -3,8 +3,8 @@ use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
 
 fn parse_line(line: &str) -> Option<(u32, u32)> {
-    let mut it = line.split_whitespace();
-    Some((it.next()?.parse().ok()?, it.next()?.parse().ok()?))
+    let mut it = line.split_whitespace().map_while(|s| s.parse().ok());
+    Some((it.next()?, it.next()?))
 }
 
 pub fn load_input(path: impl AsRef<Path>) -> (Vec<u32>, Vec<u32>) {
