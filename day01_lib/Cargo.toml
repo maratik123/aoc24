@@ -1,7 +1,6 @@
 [package]
-name = "day01_1"
+name = "day01_lib"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-day01_lib = { path = "../day01_lib" }
