@@ -17,10 +17,7 @@ pub fn load_input(path: impl AsRef<Path>) -> (Vec<u32>, Vec<u32>) {
 }
 
 pub fn input() -> PathBuf {
-    let mut path = Path::new(env!("CARGO_MANIFEST_DIR"))
-        .parent()
-        .unwrap()
-        .to_path_buf();
+    let mut path = parent_of_manifest();
     path.push("data");
     path.push("day01");
     path.push("input.txt");
@@ -28,14 +25,18 @@ pub fn input() -> PathBuf {
 }
 
 pub fn test_input() -> PathBuf {
-    let mut path = Path::new(env!("CARGO_MANIFEST_DIR"))
-        .parent()
-        .unwrap()
-        .to_path_buf();
+    let mut path = parent_of_manifest();
     path.push("test_data");
     path.push("day01");
     path.push("test_input.txt");
     path
+}
+
+fn parent_of_manifest() -> PathBuf {
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .parent()
+        .unwrap()
+        .to_path_buf()
 }
 
 #[cfg(test)]
