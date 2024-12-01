@@ -12,7 +12,7 @@ pub fn load_input(path: impl AsRef<Path>) -> (Vec<u32>, Vec<u32>) {
     file.lines()
         .map_while(Result::ok)
         .filter(|line| !line.is_empty())
-        .flat_map(|line| parse_line(line.as_str()))
+        .filter_map(|line| parse_line(line.as_str()))
         .collect()
 }
 
