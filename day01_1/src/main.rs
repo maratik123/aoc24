@@ -1,19 +1,19 @@
 use day01_lib::{input, load_input};
 use std::collections::HashMap;
 
-fn similarity_score(a: &[u32], b: &[u32]) -> u32 {
-    let b_occurrences = b.iter().fold(HashMap::new(), |mut acc, x| {
+fn similarity_score(a: impl IntoIterator<Item = u32>, b: impl IntoIterator<Item = u32>) -> u32 {
+    let b_occurrences = b.into_iter().fold(HashMap::new(), |mut acc, x| {
         acc.entry(x).and_modify(|x| *x += 1).or_insert(1);
         acc
     });
-    a.iter()
-        .map(|a| a * b_occurrences.get(&a).unwrap_or(&0))
+    a.into_iter()
+        .map(|x| x * b_occurrences.get(&x).unwrap_or(&0))
         .sum()
 }
 
 fn main() {
     let (a, b) = load_input(input());
-    println!("{}", similarity_score(a.as_slice(), b.as_slice()));
+    println!("{}", similarity_score(a, b));
 }
 
 #[cfg(test)]
@@ -24,6 +24,6 @@ mod tests {
     #[test]
     fn test_similarity_score() {
         let (a, b) = load_input(test_input());
-        assert_eq!(similarity_score(a.as_slice(), b.as_slice()), 31);
+        assert_eq!(similarity_score(a, b), 31);
     }
 }
