@@ -2,12 +2,12 @@ use day01_lib::{input, load_input};
 use std::collections::HashMap;
 
 fn similarity_score(a: impl IntoIterator<Item = u32>, b: impl IntoIterator<Item = u32>) -> u32 {
-    let b_occurrences = b.into_iter().fold(HashMap::new(), |mut acc, x| {
-        acc.entry(x).and_modify(|x| *x += 1).or_insert(1);
+    let b_occurrences = b.into_iter().fold(HashMap::new(), |mut acc, b| {
+        acc.entry(b).and_modify(|x| *x += 1).or_insert(1);
         acc
     });
     a.into_iter()
-        .map(|x| x * b_occurrences.get(&x).unwrap_or(&0))
+        .filter_map(|a| b_occurrences.get(&a).map(|b| a * b))
         .sum()
 }
 
