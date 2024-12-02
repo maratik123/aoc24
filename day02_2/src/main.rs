@@ -1,18 +1,22 @@
 use day02_lib::{input, is_safe_report, load_input};
 
 fn count_safe_reports(rows: &[Vec<u32>]) -> usize {
+    let mut buffer: Vec<u32> = vec![];
     rows.iter()
         .filter(|&row| {
             if is_safe_report(row) {
                 return true;
             }
-            let mut test_row: Vec<u32> = Vec::with_capacity(row.len() - 1);
+            if row.is_empty() {
+                return false;
+            }
+            buffer.reserve(row.len() - 1);
             for (i, _) in row.iter().enumerate() {
-                test_row.extend(row[..i].iter().chain(row[i + 1..].iter()));
-                if is_safe_report(&test_row) {
+                buffer.extend(row[..i].iter().chain(row[i + 1..].iter()));
+                if is_safe_report(&buffer) {
                     return true;
                 }
-                test_row.clear();
+                buffer.clear();
             }
             false
         })
