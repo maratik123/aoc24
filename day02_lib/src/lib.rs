@@ -2,24 +2,25 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
 
-fn parse_line(line: &str) -> Option<(u32, u32)> {
-    let mut it = line.split_whitespace().map_while(|s| s.parse().ok());
-    Some((it.next()?, it.next()?))
+fn parse_line(line: &str) -> Vec<u32> {
+    line.split_whitespace()
+        .map_while(|s| s.parse().ok())
+        .collect()
 }
 
-pub fn load_input(path: impl AsRef<Path>) -> (Vec<u32>, Vec<u32>) {
+pub fn load_input(path: impl AsRef<Path>) -> Vec<Vec<u32>> {
     let file = BufReader::new(File::open(path).unwrap());
     file.lines()
         .map_while(Result::ok)
         .filter(|line| !line.is_empty())
-        .filter_map(|line| parse_line(line.as_str()))
+        .map(|line| parse_line(line.as_str()))
         .collect()
 }
 
 pub fn input() -> PathBuf {
     let mut path = parent_of_manifest();
     path.push("data");
-    path.push("day01");
+    path.push("day02");
     path.push("input.txt");
     path
 }
@@ -27,7 +28,7 @@ pub fn input() -> PathBuf {
 pub fn test_input() -> PathBuf {
     let mut path = parent_of_manifest();
     path.push("test_data");
-    path.push("day01");
+    path.push("day02");
     path.push("input.txt");
     path
 }
@@ -45,16 +46,26 @@ mod tests {
 
     #[test]
     fn test_parse_line() {
-        assert_eq!(parse_line(""), None);
-        assert_eq!(parse_line("3   4"), Some((3, 4)));
-        assert_eq!(parse_line("35134   63205"), Some((35134, 63205)));
+        assert_eq!(parse_line(""), vec![]);
+        assert_eq!(parse_line("7 6 4 2 1"), vec![7, 6, 4, 2, 1]);
+        assert_eq!(
+            parse_line("11 12 15 18 19 18"),
+            vec![11, 12, 15, 18, 19, 18]
+        );
     }
 
     #[test]
     fn test_load_input() {
         assert_eq!(
             load_input(test_input()),
-            (vec![3, 4, 2, 1, 3, 3], vec![4, 3, 5, 3, 9, 3])
+            vec![
+                vec![7, 6, 4, 2, 1],
+                vec![1, 2, 7, 8, 9],
+                vec![9, 7, 6, 2, 1],
+                vec![1, 3, 2, 4, 5],
+                vec![8, 6, 4, 4, 1],
+                vec![1, 3, 6, 7, 9]
+            ]
         );
     }
 }

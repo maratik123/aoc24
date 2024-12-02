@@ -2,7 +2,9 @@
 
 resolver = "2"
 members = [
-  "day01_0",
-  "day01_1",
-  "day01_lib"
+    "day01_0",
+    "day01_1",
+    "day01_lib",
+    "day02_1",
+    "day02_lib"
 ]
