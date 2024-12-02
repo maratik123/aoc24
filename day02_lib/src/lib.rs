@@ -64,7 +64,7 @@ fn increasing_in_limits(a: u32, b: u32) -> bool {
 }
 
 fn decreasing_in_limits(a: u32, b: u32) -> bool {
-    a > b && (1..=3).contains(&(a - b))
+    increasing_in_limits(b, a)
 }
 
 impl<'a> Direction<'a> {
