@@ -11,8 +11,9 @@ fn count_safe_reports(rows: &[Vec<u32>]) -> usize {
                 return false;
             }
             buffer.reserve(row.len() - 1);
-            for (i, _) in row.iter().enumerate() {
-                buffer.extend(row[..i].iter().chain(row[i + 1..].iter()));
+            for i in 0..row.len() {
+                buffer.extend(&row[..i]);
+                buffer.extend(&row[i + 1..]);
                 if is_safe_report(&buffer) {
                     return true;
                 }
