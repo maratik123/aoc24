@@ -46,24 +46,22 @@ enum Direction<'a> {
     Decreasing(&'a [u32]),
 }
 
+macro_rules! check_direction {
+    ($head:expr, $tail:expr) => {
+        $tail.iter().scan(*$head, |prev, it| {
+            let result = (*prev, *it);
+            *prev = *it;
+            Some(result)
+        })
+    };
+}
+
 impl<'a> Direction<'a> {
     fn check_direction(&'a self) -> bool {
         match self {
-            Direction::Increasing([head, tail @ ..]) => tail
-                .iter()
-                .scan(*head, |prev, it| {
-                    let result = (*prev, *it);
-                    *prev = *it;
-                    Some(result)
-                })
+            Direction::Increasing([head, tail @ ..]) => check_direction!(head, tail)
                 .all(|(prev, it)| prev < it && (1..=3).contains(&(it - prev))),
-            Direction::Decreasing([head, tail @ ..]) => tail
-                .iter()
-                .scan(*head, |prev, it| {
-                    let result = (*prev, *it);
-                    *prev = *it;
-                    Some(result)
-                })
+            Direction::Decreasing([head, tail @ ..]) => check_direction!(head, tail)
                 .all(|(prev, it)| prev > it && (1..=3).contains(&(prev - it))),
             _ => true,
         }
