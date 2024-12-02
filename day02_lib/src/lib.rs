@@ -40,6 +40,50 @@ fn parent_of_manifest() -> PathBuf {
         .to_path_buf()
 }
 
+#[derive(Eq, PartialEq, Copy, Clone, Debug)]
+enum Direction<'a> {
+    Increasing(&'a [u32]),
+    Decreasing(&'a [u32]),
+}
+
+fn eval_direction(row: &[u32]) -> Option<Direction> {
+    match row {
+        [a, b, ..] if a > b && (1..=3).contains(&(a - b)) => Some(Direction::Decreasing(&row[1..])),
+        [a, b, ..] if a < b && (1..=3).contains(&(b - a)) => Some(Direction::Increasing(&row[1..])),
+        _ => None,
+    }
+}
+
+fn check_direction(dir: Direction) -> bool {
+    match dir {
+        Direction::Increasing([head, tail @ ..]) => tail
+            .iter()
+            .scan(*head, |prev, it| {
+                let result = (*prev, *it);
+                *prev = *it;
+                Some(result)
+            })
+            .all(|(prev, it)| prev < it && (1..=3).contains(&(it - prev))),
+        Direction::Decreasing([head, tail @ ..]) => tail
+            .iter()
+            .scan(*head, |prev, it| {
+                let result = (*prev, *it);
+                *prev = *it;
+                Some(result)
+            })
+            .all(|(prev, it)| prev > it && (1..=3).contains(&(prev - it))),
+        _ => true,
+    }
+}
+
+pub fn is_safe_report(row: &[u32]) -> bool {
+    if let Some(dir) = eval_direction(row) {
+        check_direction(dir)
+    } else {
+        false
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -67,5 +111,36 @@ mod tests {
                 vec![1, 3, 6, 7, 9]
             ]
         );
+    }
+
+    #[test]
+    fn test_eval_direction() {
+        assert_eq!(
+            eval_direction(&[7, 6, 4, 2, 1]),
+            Some(Direction::Decreasing(&[6, 4, 2, 1]))
+        );
+        assert_eq!(eval_direction(&[]), None);
+        assert_eq!(eval_direction(&[0]), None);
+        assert_eq!(eval_direction(&[0, 7]), None);
+        assert_eq!(eval_direction(&[0, 0]), None);
+        assert_eq!(eval_direction(&[0, 3]), Some(Direction::Increasing(&[3])));
+    }
+
+    #[test]
+    fn test_check_direction() {
+        assert!(check_direction(Direction::Increasing(&[])));
+        assert!(check_direction(Direction::Decreasing(&[])));
+        assert!(check_direction(Direction::Increasing(&[0])));
+        assert!(check_direction(Direction::Decreasing(&[1])));
+        assert!(check_direction(Direction::Decreasing(&[1, 0])));
+        assert!(!check_direction(Direction::Increasing(&[1, 0])));
+        assert!(!check_direction(Direction::Decreasing(&[0, 1])));
+        assert!(check_direction(Direction::Increasing(&[0, 1])));
+        assert!(!check_direction(Direction::Decreasing(&[0, 4])));
+        assert!(!check_direction(Direction::Increasing(&[0, 4])));
+        assert!(!check_direction(Direction::Decreasing(&[0, 0])));
+        assert!(!check_direction(Direction::Increasing(&[0, 0])));
+        assert!(!check_direction(Direction::Decreasing(&[0, 1, 0])));
+        assert!(!check_direction(Direction::Increasing(&[0, 1, 0])));
     }
 }
