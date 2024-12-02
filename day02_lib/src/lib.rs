@@ -47,34 +47,43 @@ enum Direction<'a> {
 }
 
 macro_rules! group_adjacent {
-    ($head:expr, $tail:expr) => {
-        $tail.iter().scan(*$head, |prev, it| {
-            let result = (*prev, *it);
-            *prev = *it;
-            Some(result)
-        })
+    ($head:expr, $tail:expr, $fn:ident) => {
+        $tail
+            .iter()
+            .scan(*$head, |prev, it| {
+                let result = (*prev, *it);
+                *prev = *it;
+                Some(result)
+            })
+            .all(|(prev, it)| $fn(prev, it))
     };
+}
+
+fn increasing_in_limits(a: u32, b: u32) -> bool {
+    a < b && (1..=3).contains(&(b - a))
+}
+
+fn decreasing_in_limits(a: u32, b: u32) -> bool {
+    a > b && (1..=3).contains(&(a - b))
 }
 
 impl<'a> Direction<'a> {
     fn check_direction(&'a self) -> bool {
         match self {
-            Direction::Increasing([head, tail @ ..]) => group_adjacent!(head, tail)
-                .all(|(prev, it)| prev < it && (1..=3).contains(&(it - prev))),
-            Direction::Decreasing([head, tail @ ..]) => group_adjacent!(head, tail)
-                .all(|(prev, it)| prev > it && (1..=3).contains(&(prev - it))),
+            Direction::Increasing([head, tail @ ..]) => {
+                group_adjacent!(head, tail, increasing_in_limits)
+            }
+            Direction::Decreasing([head, tail @ ..]) => {
+                group_adjacent!(head, tail, decreasing_in_limits)
+            }
             _ => true,
         }
     }
 
     fn try_from(row: &'a [u32]) -> Option<Direction<'a>> {
         match row {
-            [a, b, ..] if a > b && (1..=3).contains(&(a - b)) => {
-                Some(Direction::Decreasing(&row[1..]))
-            }
-            [a, b, ..] if a < b && (1..=3).contains(&(b - a)) => {
-                Some(Direction::Increasing(&row[1..]))
-            }
+            [a, b, ..] if increasing_in_limits(*a, *b) => Some(Direction::Increasing(&row[1..])),
+            [a, b, ..] if decreasing_in_limits(*a, *b) => Some(Direction::Decreasing(&row[1..])),
             _ => None,
         }
     }
