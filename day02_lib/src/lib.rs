@@ -46,7 +46,7 @@ enum Direction<'a> {
     Decreasing(&'a [u32]),
 }
 
-macro_rules! check_direction {
+macro_rules! group_adjacent {
     ($head:expr, $tail:expr) => {
         $tail.iter().scan(*$head, |prev, it| {
             let result = (*prev, *it);
@@ -59,9 +59,9 @@ macro_rules! check_direction {
 impl<'a> Direction<'a> {
     fn check_direction(&'a self) -> bool {
         match self {
-            Direction::Increasing([head, tail @ ..]) => check_direction!(head, tail)
+            Direction::Increasing([head, tail @ ..]) => group_adjacent!(head, tail)
                 .all(|(prev, it)| prev < it && (1..=3).contains(&(it - prev))),
-            Direction::Decreasing([head, tail @ ..]) => check_direction!(head, tail)
+            Direction::Decreasing([head, tail @ ..]) => group_adjacent!(head, tail)
                 .all(|(prev, it)| prev > it && (1..=3).contains(&(prev - it))),
             _ => true,
         }
