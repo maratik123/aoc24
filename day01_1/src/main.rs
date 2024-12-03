@@ -1,29 +1,26 @@
-use day01_lib::{input, load_input};
-use std::collections::HashMap;
+use common::input;
+use day01_lib::{load_input, DAY};
+use std::iter;
 
-fn similarity_score(a: impl IntoIterator<Item = u32>, b: impl IntoIterator<Item = u32>) -> u32 {
-    let b_occurrences = b.into_iter().fold(HashMap::new(), |mut acc, b| {
-        acc.entry(b).and_modify(|count| *count += 1).or_insert(1);
-        acc
-    });
-    a.into_iter()
-        .filter_map(|a| b_occurrences.get(&a).map(|b| a * b))
-        .sum()
+fn total_distance(mut a: Vec<u32>, mut b: Vec<u32>) -> u32 {
+    a.sort_unstable();
+    b.sort_unstable();
+    iter::zip(a, b).map(|(a, b)| a.abs_diff(b)).sum()
 }
 
 fn main() {
-    let (a, b) = load_input(input());
-    println!("{}", similarity_score(a, b));
+    let (a, b) = load_input(input(DAY));
+    println!("{}", total_distance(a, b));
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use day01_lib::test_input;
+    use common::test_input;
 
     #[test]
-    fn test_similarity_score() {
-        let (a, b) = load_input(test_input());
-        assert_eq!(similarity_score(a, b), 31);
+    fn test_total_distance() {
+        let (a, b) = load_input(test_input(DAY));
+        assert_eq!(total_distance(a, b), 11);
     }
 }

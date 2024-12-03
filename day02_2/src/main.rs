@@ -1,4 +1,5 @@
-use day02_lib::{input, is_safe_report, load_input};
+use common::input;
+use day02_lib::{is_safe_report, load_input, DAY};
 
 fn count_safe_reports(rows: &[Vec<u32>]) -> usize {
     let mut buffer: Vec<u32> = vec![];
@@ -25,18 +26,18 @@ fn count_safe_reports(rows: &[Vec<u32>]) -> usize {
 }
 
 fn main() {
-    let rows = load_input(input());
+    let rows = load_input(input(DAY));
     println!("{}", count_safe_reports(&rows));
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use day02_lib::test_input;
+    use common::test_input;
 
     #[test]
     fn test_count_safe_reports() {
-        let rows = load_input(test_input());
+        let rows = load_input(test_input(DAY));
         assert_eq!(count_safe_reports(&rows), 4);
     }
 }

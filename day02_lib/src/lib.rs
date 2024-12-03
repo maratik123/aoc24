@@ -1,6 +1,8 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use std::path::{Path, PathBuf};
+use std::path::Path;
+
+pub const DAY: &str = "02";
 
 fn parse_line(line: &str) -> Vec<u32> {
     line.split_whitespace()
@@ -15,29 +17,6 @@ pub fn load_input(path: impl AsRef<Path>) -> Vec<Vec<u32>> {
         .filter(|line| !line.is_empty())
         .map(|line| parse_line(line.as_str()))
         .collect()
-}
-
-pub fn input() -> PathBuf {
-    let mut path = parent_of_manifest();
-    path.push("data");
-    path.push("day02");
-    path.push("input.txt");
-    path
-}
-
-pub fn test_input() -> PathBuf {
-    let mut path = parent_of_manifest();
-    path.push("test_data");
-    path.push("day02");
-    path.push("input.txt");
-    path
-}
-
-fn parent_of_manifest() -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR"))
-        .parent()
-        .unwrap()
-        .to_path_buf()
 }
 
 #[derive(Eq, PartialEq, Copy, Clone, Debug)]
@@ -98,6 +77,7 @@ pub fn is_safe_report(row: &[u32]) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use common::test_input;
 
     #[test]
     fn test_parse_line() {
@@ -112,7 +92,7 @@ mod tests {
     #[test]
     fn test_load_input() {
         assert_eq!(
-            load_input(test_input()),
+            load_input(test_input(DAY)),
             vec![
                 vec![7, 6, 4, 2, 1],
                 vec![1, 2, 7, 8, 9],

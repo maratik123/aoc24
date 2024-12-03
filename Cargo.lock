@@ -3,27 +3,37 @@
 version = 4
 
 [[package]]
-name = "day01_0"
+name = "common"
 version = "0.1.0"
-dependencies = [
- "day01_lib",
-]
 
 [[package]]
 name = "day01_1"
 version = "0.1.0"
 dependencies = [
+ "common",
+ "day01_lib",
+]
+
+[[package]]
+name = "day01_2"
+version = "0.1.0"
+dependencies = [
+ "common",
  "day01_lib",
 ]
 
 [[package]]
 name = "day01_lib"
 version = "0.1.0"
+dependencies = [
+ "common",
+]
 
 [[package]]
 name = "day02_1"
 version = "0.1.0"
 dependencies = [
+ "common",
  "day02_lib",
 ]
 
@@ -31,9 +41,13 @@ dependencies = [
 name = "day02_2"
 version = "0.1.0"
 dependencies = [
+ "common",
  "day02_lib",
 ]
 
 [[package]]
 name = "day02_lib"
 version = "0.1.0"
+dependencies = [
+ "common",
+]

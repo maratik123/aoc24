@@ -4,4 +4,5 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+common = { path = "../common" }
 day02_lib = { path = "../day02_lib" }
