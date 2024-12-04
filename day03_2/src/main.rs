@@ -13,8 +13,7 @@ enum Instruction {
 impl Instruction {
     fn eval(&self, enabled: bool) -> (Option<u32>, bool) {
         match self {
-            Instruction::Mul(n1, n2) if enabled => (Some(n1 * n2), enabled),
-            Instruction::Mul(_, _) => (None, enabled),
+            Instruction::Mul(n1, n2) => (if enabled { Some(n1 * n2) } else { None }, enabled),
             Instruction::Do => (None, true),
             Instruction::Dont => (None, false),
         }
