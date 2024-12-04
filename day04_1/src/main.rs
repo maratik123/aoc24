@@ -1,5 +1,5 @@
 use common::input;
-use day04_lib::load_input;
+use day04_lib::{load_input, DAY};
 use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 
@@ -98,7 +98,7 @@ fn xmas_count((input, line_size): (&[Vec<char>], usize)) -> usize {
 }
 
 fn main() {
-    let (input, line_size) = load_input(input("04", ""));
+    let (input, line_size) = load_input(input(DAY, ""));
     println!("{}", xmas_count((input.as_slice(), line_size)));
 }
 
@@ -106,8 +106,6 @@ fn main() {
 mod tests {
     use super::*;
     use common::test_input;
-    use day04_lib::{load_input, DAY};
-    use strum::IntoEnumIterator;
 
     #[test]
     fn test_check_range() {
