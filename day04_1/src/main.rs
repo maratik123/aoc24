@@ -66,14 +66,10 @@ impl Direction {
         }
     }
 
-    fn check_word(
-        &self,
-        (hay, line_size): (&[Vec<char>], usize),
-        word: [char; 3],
-        (i, j): (usize, usize),
-    ) -> bool {
-        self.check_range(word.len(), (i, j), (hay.len(), line_size))
-            && word.iter().enumerate().all(|(pos, letter)| {
+    fn check_word(&self, (hay, line_size): (&[Vec<char>], usize), (i, j): (usize, usize)) -> bool {
+        const WORD: [char; 3] = ['M', 'A', 'S'];
+        self.check_range(WORD.len(), (i, j), (hay.len(), line_size))
+            && WORD.iter().enumerate().all(|(pos, letter)| {
                 let (i, j) = self.pos((i, j), pos + 1);
                 hay[i][j] == *letter
             })
@@ -89,9 +85,7 @@ fn xmas_count((input, line_size): (&[Vec<char>], usize)) -> usize {
             (0..line_size)
                 .filter(|j| line[*j] == 'X')
                 .flat_map(move |j| {
-                    Direction::iter().filter(move |dir| {
-                        dir.check_word((input, line_size), ['M', 'A', 'S'], (i, j))
-                    })
+                    Direction::iter().filter(move |dir| dir.check_word((input, line_size), (i, j)))
                 })
         })
         .count()
@@ -129,11 +123,7 @@ mod tests {
         let (i, j) = (0, 4);
         assert_eq!(input[i][j], 'X');
         assert!(Direction::DownRight.check_range(3, (i, j), (10, 10)));
-        assert!(Direction::DownRight.check_word(
-            (input.as_slice(), line_size),
-            ['M', 'A', 'S'],
-            (i, j)
-        ));
+        assert!(Direction::DownRight.check_word((input.as_slice(), line_size), (i, j)));
     }
 
     #[test]

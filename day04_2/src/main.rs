@@ -19,8 +19,8 @@ impl Direction {
         }
     }
 
-    fn check_words(&self, hay: &[Vec<char>], word: [char; 2], (i, j): (usize, usize)) -> bool {
-        word.iter().enumerate().all(|(pos, letter)| {
+    fn check_words(&self, hay: &[Vec<char>], (i, j): (usize, usize)) -> bool {
+        ['M', 'S'].iter().enumerate().all(|(pos, letter)| {
             [false, true].iter().any(|&backward| {
                 let (i, j) = self.pos((i, j), pos * 2, backward);
                 hay[i][j] == *letter
@@ -38,8 +38,7 @@ fn xmas_count((input, line_size): (&[Vec<char>], usize)) -> usize {
         .take(input.len() - 2)
         .flat_map(|(i, line)| {
             (1..line_size - 1).filter(move |&j| {
-                line[j] == 'A'
-                    && Direction::iter().all(move |dir| dir.check_words(input, ['M', 'S'], (i, j)))
+                line[j] == 'A' && Direction::iter().all(move |dir| dir.check_words(input, (i, j)))
             })
         })
         .count()
@@ -62,7 +61,7 @@ mod tests {
         assert_eq!(line_size, 10);
         let (i, j) = (1, 2);
         assert_eq!(input[i][j], 'A');
-        assert!(Direction::UpRightToDownLeft.check_words(input.as_slice(), ['M', 'S'], (i, j)));
+        assert!(Direction::UpRightToDownLeft.check_words(input.as_slice(), (i, j)));
     }
 
     #[test]
