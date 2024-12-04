@@ -16,8 +16,8 @@ impl Instruction {
     }
 }
 
-fn calc_sum(insns: &[Instruction]) -> u32 {
-    insns.iter().map(|i| i.eval()).sum()
+fn calc_sum(instructions: &[Instruction]) -> u32 {
+    instructions.iter().map(|i| i.eval()).sum()
 }
 
 fn parse_input(input: &str) -> Vec<Instruction> {

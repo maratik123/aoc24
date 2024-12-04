@@ -20,8 +20,8 @@ impl Instruction {
     }
 }
 
-fn calc_sum(insns: &[Instruction]) -> u32 {
-    insns
+fn calc_sum(instructions: &[Instruction]) -> u32 {
+    instructions
         .iter()
         .scan(true, |old_state, instr| {
             let (val, new_state) = instr.eval(*old_state);
@@ -33,21 +33,17 @@ fn calc_sum(insns: &[Instruction]) -> u32 {
 }
 
 fn parse_input(input: &str) -> Vec<Instruction> {
-    static RE: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r"mul\([0-9]{1,3},[0-9]{1,3}\)|do\(\)|don't\(\)").unwrap());
-    static RE_MUL: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r"mul\(([0-9]{1,3}),([0-9]{1,3})\)").unwrap());
-    static RE_DO: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"do\(\)").unwrap());
-    static RE_DONT: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"don't\(\)").unwrap());
-    RE.find_iter(input)
-        .map(|m| m.as_str())
-        .map(|m| {
-            if let Some((_, [n1, n2])) = RE_MUL.captures(m).map(|c| c.extract()) {
-                Instruction::Mul(n1.parse().unwrap(), n2.parse().unwrap())
-            } else if RE_DO.is_match(m) {
+    static RE: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r"(do\(\))|(don't\(\))|mul\(([0-9]{1,3}),([0-9]{1,3})\)").unwrap()
+    });
+    RE.captures_iter(input)
+        .map(|c| {
+            if c.get(1).is_some() {
                 Instruction::Do
-            } else if RE_DONT.is_match(m) {
+            } else if c.get(2).is_some() {
                 Instruction::Dont
+            } else if let Some((n1, n2)) = c.get(3).and_then(|m1| c.get(4).map(|m2| (m1, m2))) {
+                Instruction::Mul(n1.as_str().parse().unwrap(), n2.as_str().parse().unwrap())
             } else {
                 unreachable!()
             }

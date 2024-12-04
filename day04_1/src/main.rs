@@ -5,14 +5,14 @@ use strum_macros::EnumIter;
 
 #[derive(EnumIter, Debug)]
 enum Direction {
+    Left,
+    Right,
+    UpLeft,
     Up,
     UpRight,
-    Right,
-    DownRight,
-    Down,
     DownLeft,
-    Left,
-    UpLeft,
+    Down,
+    DownRight,
 }
 
 impl Direction {
@@ -48,8 +48,8 @@ impl Direction {
         (height, width): (usize, usize),
     ) -> bool {
         (!self.is_up() || i >= len)
-            && (!self.is_down() || i < height - len)
             && (!self.is_left() || j >= len)
+            && (!self.is_down() || i < height - len)
             && (!self.is_right() || j < width - len)
     }
 
@@ -81,20 +81,20 @@ impl Direction {
 }
 
 fn xmas_count((input, line_size): (&[Vec<char>], usize)) -> usize {
-    let mut count = 0;
-    for i in 0..input.len() {
-        assert_eq!(input[i].len(), line_size);
-        for j in 0..line_size {
-            if input[i][j] == 'X' {
-                for dir in Direction::iter() {
-                    if dir.check_word((input, line_size), ['M', 'A', 'S'], (i, j)) {
-                        count += 1;
-                    }
-                }
-            }
-        }
-    }
-    count
+    input
+        .iter()
+        .inspect(|line| debug_assert_eq!(line.len(), line_size))
+        .enumerate()
+        .flat_map(|(i, line)| {
+            (0..line_size)
+                .filter(|j| line[*j] == 'X')
+                .flat_map(move |j| {
+                    Direction::iter().filter(move |dir| {
+                        dir.check_word((input, line_size), ['M', 'A', 'S'], (i, j))
+                    })
+                })
+        })
+        .count()
 }
 
 fn main() {
