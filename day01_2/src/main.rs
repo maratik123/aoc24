@@ -13,7 +13,7 @@ fn similarity_score(a: impl IntoIterator<Item = u32>, b: impl IntoIterator<Item 
 }
 
 fn main() {
-    let (a, b) = load_input(input(DAY));
+    let (a, b) = load_input(input(DAY, ""));
     println!("{}", similarity_score(a, b));
 }
 
@@ -24,7 +24,7 @@ mod tests {
 
     #[test]
     fn test_similarity_score() {
-        let (a, b) = load_input(test_input(DAY));
+        let (a, b) = load_input(test_input(DAY, ""));
         assert_eq!(similarity_score(a, b), 31);
     }
 }

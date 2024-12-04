@@ -8,5 +8,8 @@ members = [
     "day01_lib",
     "day02_1",
     "day02_2",
-    "day02_lib"
+    "day02_lib",
+    "day03_1",
+    "day03_2",
+    "day03_lib",
 ]

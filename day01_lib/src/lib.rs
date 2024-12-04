@@ -33,7 +33,7 @@ mod tests {
     #[test]
     fn test_load_input() {
         assert_eq!(
-            load_input(test_input(DAY)),
+            load_input(test_input(DAY, "")),
             (vec![3, 4, 2, 1, 3, 3], vec![4, 3, 5, 3, 9, 3])
         );
     }

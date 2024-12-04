@@ -11,6 +11,9 @@
       <sourceFolder url="file://$MODULE_DIR$/day02_lib/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/common/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/day01_2/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/day03_1/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/day03_2/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/day03_lib/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

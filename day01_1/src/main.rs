@@ -9,7 +9,7 @@ fn total_distance(mut a: Vec<u32>, mut b: Vec<u32>) -> u32 {
 }
 
 fn main() {
-    let (a, b) = load_input(input(DAY));
+    let (a, b) = load_input(input(DAY, ""));
     println!("{}", total_distance(a, b));
 }
 
@@ -20,7 +20,7 @@ mod tests {
 
     #[test]
     fn test_total_distance() {
-        let (a, b) = load_input(test_input(DAY));
+        let (a, b) = load_input(test_input(DAY, ""));
         assert_eq!(total_distance(a, b), 11);
     }
 }

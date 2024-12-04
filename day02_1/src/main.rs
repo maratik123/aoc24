@@ -6,7 +6,7 @@ fn count_safe_reports(rows: &[Vec<u32>]) -> usize {
 }
 
 fn main() {
-    let rows = load_input(input(DAY));
+    let rows = load_input(input(DAY, ""));
     println!("{}", count_safe_reports(&rows));
 }
 
@@ -26,7 +26,7 @@ mod tests {
 
     #[test]
     fn test_count_safe_reports() {
-        let rows = load_input(test_input(DAY));
+        let rows = load_input(test_input(DAY, ""));
         assert_eq!(count_safe_reports(&rows), 2);
     }
 }
