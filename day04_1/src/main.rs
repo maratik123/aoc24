@@ -76,7 +76,7 @@ impl Direction {
     }
 }
 
-fn xmas_count((input, line_size): (&[Vec<char>], usize)) -> usize {
+fn xmas_count(inp @ (input, line_size): (&[Vec<char>], usize)) -> usize {
     input
         .iter()
         .inspect(|line| debug_assert_eq!(line.len(), line_size))
@@ -84,9 +84,7 @@ fn xmas_count((input, line_size): (&[Vec<char>], usize)) -> usize {
         .flat_map(|(i, line)| {
             (0..line_size)
                 .filter(|j| line[*j] == 'X')
-                .flat_map(move |j| {
-                    Direction::iter().filter(move |dir| dir.check_word((input, line_size), (i, j)))
-                })
+                .flat_map(move |j| Direction::iter().filter(move |dir| dir.check_word(inp, (i, j))))
         })
         .count()
 }

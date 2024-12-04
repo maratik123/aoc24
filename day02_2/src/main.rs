@@ -5,11 +5,9 @@ fn count_safe_reports(rows: &[Vec<u32>]) -> usize {
     let mut buffer: Vec<u32> = vec![];
     rows.iter()
         .filter(|&row| {
+            debug_assert!(!row.is_empty());
             if is_safe_report(row) {
                 return true;
-            }
-            if row.is_empty() {
-                return false;
             }
             buffer.reserve(row.len() - 1);
             for i in 0..row.len() {

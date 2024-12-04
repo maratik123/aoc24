@@ -21,8 +21,9 @@ impl Direction {
 
     fn check_words(&self, hay: &[Vec<char>], (i, j): (usize, usize)) -> bool {
         ['M', 'S'].iter().enumerate().all(|(pos, letter)| {
+            let pos = pos * 2;
             [false, true].iter().any(|&backward| {
-                let (i, j) = self.pos((i, j), pos * 2, backward);
+                let (i, j) = self.pos((i, j), pos, backward);
                 hay[i][j] == *letter
             })
         })
