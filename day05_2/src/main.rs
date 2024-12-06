@@ -44,7 +44,6 @@ fn main() {
 mod tests {
     use super::*;
     use common::test_input;
-    use day05_lib::{load_input, Input, DAY};
 
     #[test]
     fn test_fix_order() {
