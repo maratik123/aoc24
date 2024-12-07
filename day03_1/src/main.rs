@@ -39,7 +39,6 @@ fn main() {
 mod tests {
     use super::*;
     use common::test_input;
-    use day03_lib::{load_input, DAY};
 
     #[test]
     fn test_parse_input() {
