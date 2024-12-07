@@ -24,8 +24,8 @@ fn count_loops((mut map, guard_pos): (ObstructionMap, (usize, usize))) -> usize 
     visited.remove(&guard_pos);
 
     visited
-        .into_iter()
-        .filter(|&(i, j)| {
+        .iter()
+        .filter(|&&(i, j)| {
             map.map[i][j] = true;
             let result = is_loop((&map, guard_pos));
             map.map[i][j] = false;
