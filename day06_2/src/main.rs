@@ -19,16 +19,17 @@ fn is_loop((map, guard_pos): (&ObstructionMap, (usize, usize))) -> bool {
     }
 }
 
-fn count_loops((map, guard_pos): (ObstructionMap, (usize, usize))) -> usize {
+fn count_loops((mut map, guard_pos): (ObstructionMap, (usize, usize))) -> usize {
     let mut visited = visited_points((&map, guard_pos));
     visited.remove(&guard_pos);
 
     visited
         .into_iter()
         .filter(|&(i, j)| {
-            let mut map = map.clone();
             map.map[i][j] = true;
-            is_loop((&map, guard_pos))
+            let result = is_loop((&map, guard_pos));
+            map.map[i][j] = false;
+            result
         })
         .count()
 }
