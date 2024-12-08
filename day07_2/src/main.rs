@@ -1,6 +1,5 @@
 use common::input;
-use day07_lib::{load_input, DAY};
-use strum::IntoEnumIterator;
+use day07_lib::{load_input, total_sum, Eval, DAY};
 use strum_macros::EnumIter;
 
 #[derive(EnumIter)]
@@ -14,7 +13,7 @@ fn next_round(num: u64) -> Option<u64> {
     10u64.checked_pow(1 + num.checked_ilog10().unwrap_or(0))
 }
 
-impl Op {
+impl Eval for Op {
     fn eval(&self, left: u64, right: u32) -> Option<u64> {
         let right = right as u64;
         match self {
@@ -27,33 +26,8 @@ impl Op {
     }
 }
 
-fn dfs(end: u64, args: &[u32]) -> bool {
-    let mut s = vec![(0, args[0] as u64)];
-    while let Some((depth, val)) = s.pop() {
-        let next_depth = depth + 1;
-        for op in Op::iter() {
-            if let Some(new_val) = op.eval(val, args[next_depth]) {
-                if next_depth + 1 < args.len() {
-                    s.push((next_depth, new_val));
-                } else if new_val == end {
-                    return true;
-                }
-            }
-        }
-    }
-    false
-}
-
-fn total_sum(input: &[(u64, Vec<u32>)]) -> u64 {
-    input
-        .iter()
-        .filter(|(end, args)| dfs(*end, args))
-        .map(|(end, _)| end)
-        .sum()
-}
-
 fn main() {
-    println!("{}", total_sum(load_input(input(DAY, "")).as_slice()));
+    println!("{}", total_sum::<Op>(load_input(input(DAY, "")).as_slice()));
 }
 
 #[cfg(test)]
@@ -62,14 +36,11 @@ mod tests {
     use common::test_input;
 
     #[test]
-    fn test_dfs() {
-        assert!(dfs(190, &[10, 19]));
-        assert!(dfs(3267, &[81, 40, 27]));
-    }
-
-    #[test]
     fn test_total_sum() {
-        assert_eq!(total_sum(load_input(test_input(DAY, "")).as_slice()), 11387);
+        assert_eq!(
+            total_sum::<Op>(load_input(test_input(DAY, "")).as_slice()),
+            11387
+        );
     }
 
     #[test]
