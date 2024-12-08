@@ -4,7 +4,7 @@ use std::path::Path;
 
 pub const DAY: &str = "07";
 
-fn load_input(path: impl AsRef<Path>) -> Vec<(u64, Vec<u32>)> {
+pub fn load_input(path: impl AsRef<Path>) -> Vec<(u64, Vec<u32>)> {
     let input = BufReader::new(File::open(path).unwrap());
     input
         .lines()

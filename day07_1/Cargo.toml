@@ -6,3 +6,5 @@ edition = "2021"
 [dependencies]
 common = { path = "../common" }
 day07_lib = { path = "../day07_lib" }
+strum = "0.26"
+strum_macros = "0.26"
