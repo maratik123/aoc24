@@ -6,13 +6,13 @@ fn antinodes(
     (height, width): (usize, usize),
 ) -> Vec<(usize, usize)> {
     assert_ne!((i1, j1), (i2, j2));
-    let mut result = vec![];
+    let mut result = vec![(i1, j1), (i2, j2)];
     // n1 - n2 = d, a1 - n1 = d, n2 - a2 = d
     let (diff_i, diff_j) = (
         signed_overflowing_sub(i1, i2),
         signed_overflowing_sub(j1, j2),
     );
-    result.extend((0..).map_while(|n| {
+    result.extend((1..).map_while(|n| {
         i1.checked_add_signed(n * diff_i)
             .filter(|&i| i < height)
             .and_then(|i| {
@@ -21,7 +21,7 @@ fn antinodes(
                     .map(|j| (i, j))
             })
     }));
-    result.extend((0..).map_while(|n| {
+    result.extend((1..).map_while(|n| {
         i2.checked_add_signed(-n * diff_i)
             .filter(|&i| i < height)
             .and_then(|i| {
@@ -66,7 +66,7 @@ mod tests {
             9
         );
         assert_eq!(
-            antinodes_count(load_input(test_input(DAY, "4")), super::antinodes),
+            antinodes_count(load_input(test_input(DAY, "4")), antinodes),
             34
         );
     }
