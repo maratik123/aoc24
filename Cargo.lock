@@ -212,6 +212,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "day09_1"
+version = "0.1.0"
+dependencies = [
+ "common",
+ "day09_lib",
+]
+
+[[package]]
+name = "day09_lib"
+version = "0.1.0"
+dependencies = [
+ "common",
+]
+
+[[package]]
 name = "heck"
 version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
