@@ -13,24 +13,19 @@ fn antinodes(
         signed_overflowing_sub(i1, i2),
         signed_overflowing_sub(j1, j2),
     );
-    result.extend(
-        i1.checked_add_signed(diff_i)
-            .filter(|&i| i < height)
-            .and_then(|i| {
-                j1.checked_add_signed(diff_j)
-                    .filter(|&j| j < width)
-                    .map(|j| (i, j))
-            }),
-    );
-    result.extend(
-        i2.checked_add_signed(-diff_i)
-            .filter(|&i| i < height)
-            .and_then(|i| {
-                j2.checked_add_signed(-diff_j)
-                    .filter(|&j| j < width)
-                    .map(|j| (i, j))
-            }),
-    );
+    let mut ext = |diff_i: isize, diff_j: isize, i: usize, j: usize| {
+        result.extend(
+            i.checked_add_signed(diff_i)
+                .filter(|&i| i < height)
+                .and_then(|i| {
+                    j.checked_add_signed(diff_j)
+                        .filter(|&j| j < width)
+                        .map(|j| (i, j))
+                }),
+        );
+    };
+    ext(diff_i, diff_j, i1, j1);
+    ext(-diff_i, -diff_j, i2, j2);
     result
 }
 
