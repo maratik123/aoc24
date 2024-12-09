@@ -1,6 +1,7 @@
 use std::cell::OnceCell;
 use std::collections::{HashMap, HashSet};
 use std::fs::File;
+use std::hash::RandomState;
 use std::io::{BufRead, BufReader};
 use std::path::Path;
 
@@ -36,6 +37,34 @@ pub fn load_input(path: impl AsRef<Path>) -> Input {
     }
 }
 
+pub fn signed_overflowing_sub(n1: usize, n2: usize) -> isize {
+    let (res, overflowed) = n1.overflowing_sub(n2);
+    let res = res as isize;
+    assert_eq!(overflowed, res < 0);
+    res
+}
+
+pub fn antinodes_count<F, R>(Input { antennas, size }: Input, antinodes: F) -> usize
+where
+    F: Fn([(usize, usize); 2], (usize, usize)) -> R,
+    R: IntoIterator<Item = (usize, usize)>,
+{
+    HashSet::<_, RandomState>::from_iter(
+        antennas
+            .values()
+            .filter(|antennas| antennas.len() > 1)
+            .flat_map(|antennas| {
+                antennas.iter().flat_map(|antenna1| {
+                    antennas
+                        .iter()
+                        .filter(move |&antenna2| antenna1 != antenna2)
+                        .flat_map(|antenna2| antinodes([*antenna1, *antenna2], size))
+                })
+            }),
+    )
+    .len()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -53,5 +82,11 @@ mod tests {
                 size: (12, 12),
             }
         );
+    }
+
+    #[test]
+    fn test_signed_overflowing_sub() {
+        assert_eq!(signed_overflowing_sub(1, 2), -1);
+        assert_eq!(signed_overflowing_sub(2, 1), 1);
     }
 }
