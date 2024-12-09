@@ -188,6 +188,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "day08_1"
+version = "0.1.0"
+dependencies = [
+ "common",
+ "day08_lib",
+ "tinyvec",
+]
+
+[[package]]
+name = "day08_lib"
+version = "0.1.0"
+dependencies = [
+ "common",
+]
+
+[[package]]
 name = "heck"
 version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -281,6 +297,12 @@ dependencies = [
  "quote",
  "unicode-ident",
 ]
+
+[[package]]
+name = "tinyvec"
+version = "1.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "445e881f4f6d382d5f27c034e25eb92edd7c784ceab92a0937db7f2e9471b938"
 
 [[package]]
 name = "unicode-ident"

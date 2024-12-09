@@ -19,7 +19,7 @@ pub fn load_input(path: impl AsRef<Path>) -> (Vec<Vec<char>>, usize) {
         result.push(trimmed.chars().collect());
         buffer.clear();
     }
-    (result, line_size.get().copied().unwrap_or(0))
+    (result, line_size.get().copied().unwrap_or_default())
 }
 
 #[cfg(test)]
