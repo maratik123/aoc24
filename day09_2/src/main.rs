@@ -48,10 +48,13 @@ fn free_space_map<T>(disk_map: &[Option<T>]) -> BTreeSet<SpaceMapEntry> {
     free_space_map
 }
 
-fn defrag<T: Copy>(mut disk_map: &mut [Option<T>]) {
-    if let Some(last_file_pos) = disk_map.iter().rposition(|block| block.is_some()) {
+fn defrag<T: Copy + Eq>(mut disk_map: &mut [Option<T>]) {
+    if let Some(mut last_file_pos) = disk_map.iter().rposition(|block| block.is_some()) {
         let mut free_space_map = free_space_map(disk_map);
         let last_id = disk_map[last_file_pos].unwrap();
+        let first_file_last_pos = disk_map[..=last_file_pos]
+            .iter()
+            .rposition(|block| block.filter(|&id| id == last_id).is_some()).;
     }
 }
 
